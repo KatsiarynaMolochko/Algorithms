@@ -23,8 +23,8 @@ private:
 
     void DFS(Node* node, std::ofstream* out){
         if(node != nullptr){
-            // *out << value->value << std::endl;
-            std::cout << node->value << "\n";
+            *out << node->value << "\n";
+//            std::cout << node->value << "\n";
             Node* next_right = node->R;
             Node* next_left = node->L;
             DFS(next_left, out);
@@ -34,16 +34,6 @@ private:
 public:
     BinTree(int value){
         root = new Node(value);
-    }
-
-    void newChild(Node* young, Node* old){
-        if(!old->parent){
-            root = young;
-        } else if (old->parent->L) {
-            old->parent->L = young;
-        } else if (old->parent->R){
-            old->parent->R = young;
-        }
     }
 
     void insert(int value){
@@ -92,61 +82,40 @@ public:
         return none;
     }
 
-    void removal(int v) {
-        Node* cur = search(v);
-        // bool isCurL = cur->L != nullptr;
-
-        if(!cur->R && !cur->L) {
-            if(cur->parent->L->value == v) {
-                cur->parent->L = nullptr;
-            } else {
-                cur->parent->R = nullptr;
-            }
-            delete cur;
-        } else if(cur->L && !cur->R && cur->parent == nullptr) {
-            root = cur->L;
-            cur->L->parent = nullptr;
-        } else if(!cur->L && cur->R && cur->parent == nullptr) {
-            root = cur->R;
-            cur->R->parent = nullptr;
-        } else if(cur->L && !cur->R && cur->parent->L->value == v ) {
-            cur->parent->L = cur->L;
-        } else if (!cur->L && cur->R && cur->parent->R->value == v ) {
-            cur->parent->R = cur->R;
-        } else if (cur->L && cur->R && cur->parent->R->value == v) {
-            Node* min = finMin(cur->R);
-            if(min->R) {
-                min->parent->L = min->R;
-                min->R = nullptr;
-            }
-
-            min->parent->R = cur->R;
-            min->parent->L = cur->L;
-            min->parent = cur->parent;
-
-        } else if (cur->L && cur->R && cur->parent->L->value == v) {
-//            Node* min = finMin(cur->R);
-//            if (min->R) {
-//                min->parent->L = min->R;
-////                min->R = nullptr;
-//            }
-////            min = cur;
-//            min->parent = cur->parent;
-//
-//            if(min->value != cur->R->value ){
-//                min->R = cur->R;
-//            }
-//
-//            if(min->value != cur->L->value){
-//                min->L = cur->L;
-//            }
 
 
+    Node* DeleteRec(Node* node, int value) {
+        if (!node) { return nullptr; } //если одна вершина в дереве
 
+        if (value < node->value) {     // если удаляемая вершина меньше той, в которой мы находимся
+            node->L = DeleteRec(node->L, value);
+            return node;
+        } else if (value > node->value) {  //если удаляемая вершина, больше той, в которой мы находимся
+            node->R = DeleteRec(node->R, value);
+            return node;
         }
 
 
+        if (!node->L && !node->R) {
+            return nullptr;
+        }
+        else if (!node->L) {  // если одно правое поддерево
+//            node->value = node->R->value;
+//            node->R = node->R->R;
+//            node->L = node->R->L;
 
+            return node;
+        } else if (!node->R) {  //если одно левое поддерево
+//            node->value = node->L->value;
+//            node->R = node->L->R;
+//            node->L = node->L->L;
+            return node;
+        } else {  //если два поддерева
+            Node* min = finMin(node->R);
+            node->value = min->value;
+            node->R = DeleteRec(node->R,min->value);
+            return node;
+        }
     }
 
     Node* finMin (Node* node) {
@@ -157,6 +126,13 @@ public:
         }
     }
 
+    Node* getRoot() {
+        return this->root;
+    }
+
+    void PreOrderTraversal(std::ofstream* out) {
+        DFS(this->root, out);
+    }
 
     void out() {
         DFS(root, nullptr);
@@ -169,7 +145,7 @@ int main() {
     file.open("input.txt");
     int num = 0;
     std::vector<int> numbers;
-    int victim;
+    int victim = 0;
     file >> victim;
 
     while (file >> num){
@@ -183,9 +159,17 @@ int main() {
         tree.insert(numbers[i]);
     }
 
-    tree.removal(victim);
+    Node* root = tree.getRoot();
 
-    tree.out();
+    root = tree.DeleteRec(root, victim);
+
+//    tree.DeleteRec(root,victim);
+    std::ofstream out("output.txt");
+    tree.PreOrderTraversal(&out);
+
+    out.close();
+
+
 //    std::cout << "Hello, World!" << std::endl;
     file.close();
 

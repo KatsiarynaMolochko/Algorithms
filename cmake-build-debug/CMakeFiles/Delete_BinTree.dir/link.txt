@@ -1,3 +1,3 @@
 "C:\Program Files\JetBrains\CLion 2020.3.2\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\Delete_BinTree.dir/objects.a
 C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\ar.exe cr CMakeFiles\Delete_BinTree.dir/objects.a @CMakeFiles\Delete_BinTree.dir\objects1.rsp
-C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE -g   -Wl,--whole-archive CMakeFiles\Delete_BinTree.dir/objects.a -Wl,--no-whole-archive  -o Delete_BinTree.exe -Wl,--out-implib,libDelete_BinTree.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Delete_BinTree.dir\linklibs.rsp
+C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE -g   -Wl,--stack,2000 -Wl,--whole-archive CMakeFiles\Delete_BinTree.dir/objects.a -Wl,--no-whole-archive  -o Delete_BinTree.exe -Wl,--out-implib,libDelete_BinTree.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Delete_BinTree.dir\linklibs.rsp
